@@ -48,5 +48,8 @@ group :development do
   # gem "spring"
 end
 
-gem 'rubocop', '>= 1.0', '< 2.0'
+group :test do
+  gem 'simplecov', require: false
+end
 
+gem 'rubocop', '>= 1.0', '< 2.0'

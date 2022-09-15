@@ -30,3 +30,6 @@
 
 # Ignore spec files
 spec/examples.txt
+
+# Ignore coverage files
+coverage/
