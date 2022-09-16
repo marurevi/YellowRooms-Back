@@ -4,14 +4,15 @@ class Api::V1::RoomsController < ApplicationController
     if @rooms.empty?
       render json: { message: 'No rooms found' }, status: :not_found
     else
-      render json: @rooms, status: :ok
+      hash = RoomSerializer.new(Room.all.where(deleted: false)).serializable_hash
+      render json: hash, status: :ok
     end
   end
 
   def create
     @room = Room.new(room_params)
     if @room.save
-      render json: @room, status: :created
+      render json: RoomSerializer.new(@room).serializable_hash, status: :created
     else
       render json: @room.errors, status: :unprocessable_entity
     end

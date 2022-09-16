@@ -23,12 +23,12 @@ RSpec.describe 'Rooms', type: :request do
 
       it 'returns all rooms' do
         get api_v1_rooms_path
-        expect(JSON.parse(response.body).size).to eq(3)
+        expect(JSON.parse(response.body)['data'].size).to eq(3)
       end
 
       it 'returns the correct rooms' do
         get api_v1_rooms_path
-        expect(JSON.parse(response.body).map { |r| r['id'] }).to match_array([@r1.id, @r2.id, @r3.id])
+        expect(JSON.parse(response.body)['data'].map { |r| r['id'].to_i }).to match_array([@r1.id, @r2.id, @r3.id])
       end
     end
   end
@@ -74,7 +74,7 @@ RSpec.describe 'Rooms', type: :request do
 
       it 'returns the room' do
         post api_v1_rooms_path, params: { room: FactoryBot.attributes_for(:room) }
-        expect(JSON.parse(response.body)['name']).to eq('Room 1')
+        expect(JSON.parse(response.body)['data']['attributes']['name']).to eq('Room 1')
       end
 
       it 'creates the room' do
