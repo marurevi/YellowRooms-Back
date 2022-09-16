@@ -28,7 +28,8 @@ class Api::V1::RoomsController < ApplicationController
     if @room.save
       render json: { code: 200, data: { message: 'Room deleted' } }, status: :ok
     else
-      render json: @room.errors, status: :unprocessable_entity
+      render json: { code: 422, data: { errors: @room.errors.full_messages.to_sentence } },
+             status: :unprocessable_entity
     end
   end
 
