@@ -74,7 +74,7 @@ RSpec.describe 'Rooms', type: :request do
 
       it 'returns the room' do
         post api_v1_rooms_path, params: { room: FactoryBot.attributes_for(:room) }
-        expect(JSON.parse(response.body)['data']['attributes']['name']).to eq('Room 1')
+        expect(JSON.parse(response.body)['data']['name']).to eq('Room 1')
       end
 
       it 'creates the room' do
@@ -108,7 +108,7 @@ RSpec.describe 'Rooms', type: :request do
       it 'returns the correct message' do
         @room = FactoryBot.create(:room)
         delete api_v1_room_path(@room)
-        expect(JSON.parse(response.body)['message']).to eq('Room deleted')
+        expect(JSON.parse(response.body)['data']['message']).to eq('Room deleted')
       end
 
       it 'deletes the correct room' do

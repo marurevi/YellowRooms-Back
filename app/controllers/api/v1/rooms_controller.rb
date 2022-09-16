@@ -4,17 +4,21 @@ class Api::V1::RoomsController < ApplicationController
     if @rooms.empty?
       render json: { message: 'No rooms found' }, status: :not_found
     else
-      hash = RoomSerializer.new(Room.all.where(deleted: false)).serializable_hash
-      render json: hash, status: :ok
+      hash = RoomSerializer.new(Room.all.where(deleted: false)).serializable_hash[:data].map do |data|
+        data[:attributes]
+      end
+      render json: { code: 200, data: hash }, status: :ok
     end
   end
 
   def create
     @room = Room.new(room_params)
     if @room.save
-      render json: RoomSerializer.new(@room).serializable_hash, status: :created
+      render json: { code: 201, data: RoomSerializer.new(@room).serializable_hash[:data][:attributes] },
+             status: :created
     else
-      render json: @room.errors, status: :unprocessable_entity
+      render json: { code: 422, data: { errors: @room.errors.full_messages.to_sentence } },
+             status: :unprocessable_entity
     end
   end
 
@@ -22,7 +26,7 @@ class Api::V1::RoomsController < ApplicationController
     @room = Room.find(params[:id])
     @room.deleted = true
     if @room.save
-      render json: { message: 'Room deleted' }, status: :ok
+      render json: { code: 200, data: { message: 'Room deleted' } }, status: :ok
     else
       render json: @room.errors, status: :unprocessable_entity
     end
