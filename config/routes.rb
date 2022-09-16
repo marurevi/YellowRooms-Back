@@ -11,7 +11,10 @@ Rails.application.routes.draw do
       devise_for :users,
                  path: '',
                  path_names: { sign_in: 'login', sign_out: 'logout', registration: 'register' },
-                 defaults: { format: :json }
+                 defaults: { format: :json },
+                 controllers: {
+                  registrations: 'api/v1/users/registrations'
+                 }
     end
   end
 end
