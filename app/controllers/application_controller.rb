@@ -1,3 +1,3 @@
 class ApplicationController < ActionController::API
-    respond_to :json
+  respond_to :json
 end
