@@ -13,7 +13,8 @@ Rails.application.routes.draw do
                  path_names: { sign_in: 'login', sign_out: 'logout', registration: 'register' },
                  defaults: { format: :json },
                  controllers: {
-                  registrations: 'api/v1/users/registrations'
+                  registrations: 'api/v1/users/registrations',
+                  sessions: 'api/v1/users/sessions'
                  }
     end
   end
