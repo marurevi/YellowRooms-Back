@@ -15,20 +15,20 @@ RSpec.describe 'Reservations', type: :request do
     end
     context 'when there are reservations' do
       before do
-        @user1 = create(:user, username: 'u1', email: 'e1@email.com')
-        @user2 = create(:user, username: 'u2', email: 'e2@email.com')
-        @user3 = create(:user, username: 'u3', email: 'e3@email.com')
+        @user1 = FactoryBot.create(:user, username: 'u1', email: 'e1@email.com')
+        @user2 = FactoryBot.create(:user, username: 'u2', email: 'e2@email.com')
+        @user3 = FactoryBot.create(:user, username: 'u3', email: 'e3@email.com')
 
-        @room1 = create(:room, name: 'Room 1')
-        @room2 = create(:room, name: 'Room 2')
-        @room3 = create(:room, name: 'Room 3')
+        @room1 = FactoryBot.create(:room, name: 'Room 1')
+        @room2 = FactoryBot.create(:room, name: 'Room 2')
+        @room3 = FactoryBot.create(:room, name: 'Room 3')
 
-        @r1 = create(:reservation, user: @user1, room: @room1, start_date: Date.today,
-                                   end_date: Date.today + 1.day)
-        @r2 = create(:reservation, user: @user2, room: @room2, start_date: Date.today,
-                                   end_date: Date.today + 3.day)
-        @r3 = create(:reservation, user: @user3, room: @room3, start_date: Date.today,
-                                   end_date: Date.today + 2.day)
+        @r1 = FactoryBot.create(:reservation, user: @user1, room: @room1, start_date: Date.today,
+                                              end_date: Date.today + 1.day)
+        @r2 = FactoryBot.create(:reservation, user: @user2, room: @room2, start_date: Date.today,
+                                              end_date: Date.today + 3.day)
+        @r3 = FactoryBot.create(:reservation, user: @user3, room: @room3, start_date: Date.today,
+                                              end_date: Date.today + 2.day)
         get api_v1_reservations_path
       end
 
@@ -63,8 +63,8 @@ RSpec.describe 'Reservations', type: :request do
     end
     context 'when the params are valid' do
       before do
-        @user = create(:user)
-        @room = create(:room)
+        @user = FactoryBot.create(:user)
+        @room = FactoryBot.create(:room)
         post api_v1_reservations_path,
              params: { reservation: FactoryBot.attributes_for(:reservation, user_id: @user.id, room_id: @room.id) }
       end
@@ -92,9 +92,9 @@ RSpec.describe 'Reservations', type: :request do
     end
     context 'when the reservation exists' do
       before do
-        @user = create(:user)
-        @room = create(:room)
-        @reservation = create(:reservation, user: @user, room: @room)
+        @user = FactoryBot.create(:user)
+        @room = FactoryBot.create(:room)
+        @reservation = FactoryBot.create(:reservation, user: @user, room: @room)
         delete api_v1_reservation_path(@reservation)
       end
       it 'returns http success' do
