@@ -4,9 +4,7 @@ class Api::V1::RoomsController < ApplicationController
     if @rooms.empty?
       render json: { message: 'No rooms found' }, status: :not_found
     else
-      hash = RoomSerializer.new(Room.all.where(deleted: false)).serializable_hash[:data].map do |data|
-        data[:attributes]
-      end
+      hash = RoomSerializer.new(Room.all.where(deleted: false)).serializable_hash[:data]
       render json: { code: 200, data: hash }, status: :ok
     end
   end
