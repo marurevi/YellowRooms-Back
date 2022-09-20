@@ -4,14 +4,18 @@ class Api::V1::ReservationsController < ApplicationController
     if @reservations.empty?
       render json: { error: "Couldn't find Reservation" }, status: :not_found
     else
-      render json: { code: 200, data: @reservations }, status: :ok
+      hash = ReservationSerializer.new(@reservations).serializable_hash[:data].map do |data|
+        data[:attributes]
+      end
+      render json: { code: 200, data: hash }, status: :ok
     end
   end
 
   def create
     @reservation = Reservation.new(reservation_params)
     if @reservation.save
-      render json: { code: 201, data: @reservation }, status: :created
+      hash = ReservationSerializer.new(@reservation).serializable_hash[:data][:attributes]
+      render json: { code: 201, data: hash }, status: :created
     else
       render json: { code: 422, data: { errors: @reservation.errors.full_messages.to_sentence } },
              status: :unprocessable_entity
