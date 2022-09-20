@@ -19,10 +19,27 @@ RSpec.describe Reservation, type: :model do
       reservation.end_date = nil
       expect(reservation).to_not be_valid
     end
+    context 'when the date is not a Date type' do
+      it 'is invalid if start date is a string' do
+        reservation.start_date = '2019-01-01'
+        expect(reservation).to_not be_valid
+      end
+      it 'is invalid if end date is a string' do
+        reservation.end_date = '2019-01-01'
+        expect(reservation).to_not be_valid
+      end
+    end
     it 'is invalid without a city' do
       reservation.city = nil
       expect(reservation).to_not be_valid
     end
+    context 'when the city is not a string' do
+      it 'is invalid' do
+        reservation.city = 1
+        expect(reservation).to_not be_valid
+      end
+    end
+
     it 'is invalid if start date is after end date' do
       reservation.start_date = Date.tomorrow
       reservation.end_date = Date.today
