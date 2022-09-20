@@ -4,9 +4,7 @@ class Api::V1::ReservationsController < ApplicationController
     if @reservations.empty?
       render json: { error: "Couldn't find Reservation" }, status: :not_found
     else
-      hash = ReservationSerializer.new(@reservations).serializable_hash[:data].map do |data|
-        data[:attributes]
-      end
+      hash = ReservationSerializer.new(@reservations).serializable_hash[:data]
       render json: { code: 200, data: hash }, status: :ok
     end
   end
