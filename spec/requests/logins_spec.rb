@@ -10,7 +10,7 @@ RSpec.describe 'Logins', type: :request do
         post '/api/v1/login',
              params: {
                user: {
-                 email: user.email,
+                 login: user.username,
                  password: 'password'
                }
              }
@@ -27,12 +27,12 @@ RSpec.describe 'Logins', type: :request do
         post '/api/v1/login',
              params: {
                user: {
-                 email: 'other@email.com',
+                 login: 'otherusername',
                  password: 'password'
                }
              }
         expect(response).to have_http_status(401)
-        expect(response_body['error']).to match(/invalid email or password/i)
+        expect(response_body['error']).to match(/invalid login or password/i)
         expect(response.headers).not_to include('Authorization')
       end
     end
