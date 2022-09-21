@@ -90,15 +90,9 @@ paths:
               examples:
                 invalid_photo:
                   value:
-                    code: 201
+                    code: 422
                     data:
-                      id: 6
-                      name: string
-                      stars: 0
-                      persons_allowed: 0
-                      photo: http://photo_url
-                      description: string
-                      price: 0
+                      errors: Photo is invalid
         '401':
           description: Unauthorized user
           content:
@@ -133,6 +127,40 @@ paths:
               - photo
               - description
               - price
+  "/api/v1/rooms/{id}":
+    delete:
+      summary: delete room
+      tags:
+      - Rooms
+      description: Delete a room
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 200
+                    data:
+                      message: Room deleted
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
   "/api/v1/register":
     post:
       summary: create account

@@ -125,5 +125,35 @@ RSpec.describe 'api/v1/rooms', type: :request do
       end
     end
   end
+
+  path '/api/v1/rooms/{id}' do
+    delete('delete room') do
+      tags 'Rooms'
+      description 'Delete a room'
+      consumes 'application/json'
+      security [bearer_auth: []]
+      parameter name: 'id', in: :path, type: :string, description: 'id'
+
+      response(200, 'successful') do
+        let(:id) { create(:room).id }
+        example 'application/json', :successful, {
+          code: 200,
+          data: {
+            message: 'Room deleted'
+          }
+        }
+        run_test!
+      end
+
+      response(401, 'Unauthorized user') do
+        let(:id) { create(:room).id }
+        let(:Authorization) { 'invalid_token' }
+        example 'application/json', :unauthorized, {
+          error: 'You need to sign in or sign up before continuing.'
+        }
+        run_test!
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
