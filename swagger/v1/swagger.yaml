@@ -5,6 +5,59 @@ info:
   version: v1
   description: An api to keep track of rooms and reservations of Yellow rooms hotel
 paths:
+  "/api/v1/rooms":
+    get:
+      summary: list rooms
+      tags:
+      - Rooms
+      description: List all rooms
+      security:
+      - bearer_auth: []
+      responses:
+        '404':
+          description: No rooms
+          content:
+            application/json:
+              examples:
+                no_rooms:
+                  value:
+                    message: No rooms found
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+        '200':
+          description: Successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 200
+                    data:
+                    - id: '1'
+                      type: room
+                      attributes:
+                        id: 1
+                        name: Room 1
+                        stars: 3
+                        persons_allowed: 2
+                        photo: photo_url
+                        description: description
+                        price: 340.7
+                      relationships:
+                        reservations:
+                          data:
+                          - id: '4'
+                            type: reservation
+                        users:
+                          data:
+                          - id: '1'
+                            type: user
   "/api/v1/register":
     post:
       summary: create account
