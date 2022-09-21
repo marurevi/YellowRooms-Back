@@ -123,6 +123,35 @@ paths:
                   required:
                   - login
                   - password
+  "/api/v1/logout":
+    delete:
+      summary: delete session
+      tags:
+      - Authentication
+      description: logout the user and revoke the jwt token
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successfully logout
+          content:
+            application/json:
+              examples:
+                succesful_logout:
+                  value:
+                    code: 200
+                    data:
+                      message: logged out successfully
+        '401':
+          description: No active session
+          content:
+            application/json:
+              examples:
+                no_session:
+                  value:
+                    code: 401
+                    data:
+                      message: Couldn't find an active session.
 components:
   securitySchemes:
     bearer_auth:

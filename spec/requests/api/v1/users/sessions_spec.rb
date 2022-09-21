@@ -49,5 +49,40 @@ RSpec.describe 'api/v1/users/sessions', type: :request do
       end
     end
   end
+
+  path '/api/v1/logout' do
+    delete('delete session') do
+      tags 'Authentication'
+      description 'logout the user and revoke the jwt token'
+      consumes 'application/json'
+      security [bearer_auth: []]
+
+      response(200, 'successfully logout') do
+        let(:user) { create(:user) }
+        let(:Authorization) { Devise::JWT::TestHelpers.auth_headers({}, user)['Authorization'] }
+
+        example 'application/json', :succesful_logout, {
+          code: 200,
+          data: {
+            message: 'logged out successfully'
+          }
+        }
+
+        run_test!
+      end
+
+      response(401, 'No active session') do
+        let(:Authorization) { 'invalid_auth' }
+        example 'application/json', :no_session, {
+          code: 401,
+          data: {
+            message: "Couldn't find an active session."
+          }
+        }
+
+        run_test!
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
