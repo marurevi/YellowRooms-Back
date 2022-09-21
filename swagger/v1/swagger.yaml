@@ -5,6 +5,58 @@ info:
   version: v1
   description: An api to keep track of rooms and reservations of Yellow rooms hotel
 paths:
+  "/api/v1/reservations":
+    get:
+      summary: list reservations
+      tags:
+      - Reservations
+      description: List all reservations
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 200
+                    data:
+                    - id: '1'
+                      type: reservation
+                      attributes:
+                        id: 1
+                        user_id: 1
+                        room_id: 1
+                        start_date: '2022-09-21'
+                        end_date: '2022-09-23'
+                        city: Medellin
+                      relationships:
+                        user:
+                          data:
+                            id: '1'
+                            type: user
+                        room:
+                          data:
+                            id: '1'
+                            type: room
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+        '404':
+          description: No reservations
+          content:
+            application/json:
+              examples:
+                no_reservations:
+                  value:
+                    error: Couldn't find Reservation
   "/api/v1/rooms":
     get:
       summary: list rooms
