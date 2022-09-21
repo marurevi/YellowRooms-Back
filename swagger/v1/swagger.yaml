@@ -1,0 +1,92 @@
+---
+openapi: 3.0.1
+info:
+  title: YELLOW ROOMS API V1
+  version: v1
+  description: An api to keep track of rooms and reservations of Yellow rooms hotel
+paths:
+  "/api/v1/register":
+    post:
+      summary: create account
+      tags:
+      - Authentication
+      description: creates an account
+      parameters: []
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              examples:
+                successfull_request:
+                  value:
+                    code: 201
+                    data:
+                      message: Signed up succesfully!
+                      user:
+                        id: 1
+                        username: string
+                        email: user@example.com
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              examples:
+                blank_username:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Username can't
+                        be blank, and Username only allows letters
+                blank_email:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Email can't
+                        be blank
+                username_taken:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Username has
+                        already been taken
+                email_taken:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Email has already
+                        been taken
+                invalid_username:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Username only
+                        allows letters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                    username:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - username
+                  - password
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000/
+tags:
+- name: Authentication
