@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Rooms', type: :request do
+  let(:user) { create(:user) }
+  let(:headers) { generate_jwt_token_for(user) }
+
   describe 'GET /api/v1/rooms' do
-    before { get api_v1_rooms_path }
+    before { get api_v1_rooms_path, headers: }
     context 'when there are no rooms' do
       it 'returns a 404 status code' do
         expect(response).to have_http_status(:not_found)
@@ -14,7 +17,7 @@ RSpec.describe 'Rooms', type: :request do
         @r1 = FactoryBot.create(:room)
         @r2 = FactoryBot.create(:room)
         @r3 = FactoryBot.create(:room)
-        get api_v1_rooms_path
+        get api_v1_rooms_path, headers:
       end
 
       it 'returns http success' do
@@ -34,26 +37,23 @@ RSpec.describe 'Rooms', type: :request do
   end
 
   describe 'POST /api/v1/rooms' do
-    context 'when the params are invalid' do
+    context 'passing invalid parameters' do
       let(:invalid_params) do
-        { room: { name: '', stars: 3, persons_allowed: 4, photo: 'photo_url', description: 'Description',
-                  price: 100.5 } }
+        { name: '', stars: 3, persons_allowed: 4, photo: 'photo_url', description: 'Description', price: 100.5 }
       end
 
       it 'does not create a new room' do
-        expect { post api_v1_rooms_path, params: invalid_params }.to change(Room, :count).by(0)
-      end
+        post '/api/v1/rooms', headers: headers, params: JSON.generate({ room: invalid_params })
 
-      it 'returns http unprocessable entity' do
-        post api_v1_rooms_path, params: invalid_params
         expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)['data']).to include 'errors'
+        expect(Room.count).to eq 0
       end
     end
 
     context 'when the params are valid' do
-      before do
-        post api_v1_rooms_path, params: { room: FactoryBot.attributes_for(:room) }
-      end
+      before { post '/api/v1/rooms', params: JSON.generate({ room: attributes_for(:room) }), headers: }
+
       it 'returns http created' do
         expect(response).to have_http_status(:created)
       end
@@ -71,7 +71,7 @@ RSpec.describe 'Rooms', type: :request do
   describe 'DELETE /api/v1/rooms/:id' do
     before do
       @room = FactoryBot.create(:room)
-      delete api_v1_room_path(@room.id)
+      delete api_v1_room_path(@room.id), headers:
     end
 
     context 'when the room exists' do

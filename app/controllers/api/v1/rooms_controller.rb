@@ -1,4 +1,6 @@
 class Api::V1::RoomsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @rooms = Room.all.where(deleted: false)
     if @rooms.empty?
