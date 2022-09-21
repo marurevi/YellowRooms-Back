@@ -57,6 +57,73 @@ paths:
                 no_reservations:
                   value:
                     error: Couldn't find Reservation
+    post:
+      summary: create reservation
+      tags:
+      - Reservations
+      description: Create a reservation
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 201
+                    data:
+                      id: 2
+                      user_id: 1
+                      room_id: 1
+                      start_date: '2022-09-21'
+                      end_date: '2022-09-22'
+                      city: string
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              examples:
+                invalid_date:
+                  value:
+                    code: 422
+                    data:
+                      errors: Start date must be greater than or equal to 2022-09-21
+                        and Room is not available
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                room_id:
+                  type: integer
+                start_date:
+                  type: date
+                  example: '2022-09-21'
+                end_date:
+                  type: date
+                  example: '2022-09-22'
+                city:
+                  type: string
+              required:
+              - user_id
+              - room_id
+              - start_date
+              - end_date
+              - city
   "/api/v1/rooms":
     get:
       summary: list rooms
