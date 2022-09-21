@@ -77,6 +77,52 @@ paths:
                   - email
                   - username
                   - password
+  "/api/v1/login":
+    post:
+      summary: create session
+      tags:
+      - Authentication
+      description: Authenticates an user and returns a jwt token
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successfull_login:
+                  value:
+                    code: 200
+                    data:
+                      user:
+                        id: 1
+                        username: string
+                        email: user@example.com
+                      message: Logged in successfully.
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              examples:
+                invalid_credentials:
+                  value:
+                    error: Invalid Login or password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    login:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - login
+                  - password
 components:
   securitySchemes:
     bearer_auth:
