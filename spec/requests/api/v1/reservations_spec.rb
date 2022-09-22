@@ -13,7 +13,7 @@ RSpec.describe 'api/v1/reservations', type: :request do
       security [bearer_auth: []]
 
       response(200, 'successful') do
-        before { create_list(:reservation, 2) }
+        before { create_list(:reservation, 2, user:) }
 
         example 'application/json', :successful, {
           code: 200,
