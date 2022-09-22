@@ -2,7 +2,7 @@ class Api::V1::ReservationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @reservations = Reservation.all
+    @reservations = current_user.reservations
     if @reservations.empty?
       render json: { error: "Couldn't find Reservation" }, status: :not_found
     else
