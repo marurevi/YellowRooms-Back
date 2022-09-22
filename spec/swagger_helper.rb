@@ -26,7 +26,7 @@ RSpec.configure do |config|
           bearer_auth: {
             type: :http,
             scheme: :bearer,
-            bearerFormat: 'JWT'
+            bearer_format: 'JWT'
           }
         }
       },
@@ -43,6 +43,12 @@ RSpec.configure do |config|
       tags: [
         {
           name: 'Authentication'
+        },
+        {
+          name: 'Rooms'
+        },
+        {
+          name: 'Reservations'
         }
       ]
     }

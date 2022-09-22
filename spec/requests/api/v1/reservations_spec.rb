@@ -2,10 +2,10 @@ require 'swagger_helper'
 
 # rubocop:disable Metrics/BlockLength
 RSpec.describe 'api/v1/reservations', type: :request do
-  path '/api/v1/reservations' do
-    let(:user) { create(:user) }
-    let(:Authorization) { Devise::JWT::TestHelpers.auth_headers({}, user)['Authorization'] }
+  let(:user) { create(:user) }
+  let(:Authorization) { Devise::JWT::TestHelpers.auth_headers({}, user)['Authorization'] }
 
+  path '/api/v1/reservations' do
     get('list reservations') do
       tags 'Reservations'
       description 'List all reservations'
@@ -123,6 +123,39 @@ RSpec.describe 'api/v1/reservations', type: :request do
           }
         }
 
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/reservations/{id}' do
+    parameter name: 'id', in: :path, type: :string, description: 'id'
+
+    delete('delete reservation') do
+      tags 'Reservations'
+      description 'Delete a reservation'
+      produces 'application/json'
+      security [bearer_auth: []]
+
+      response(200, 'successful') do
+        let(:id) { create(:reservation).id }
+
+        example 'application/json', :successful, {
+          code: 200,
+          data: {
+            message: 'Reservation deleted'
+          }
+        }
+
+        run_test!
+      end
+
+      response(401, 'Unauthorized user') do
+        let(:id) { create(:reservation).id }
+        let(:Authorization) { 'invalid_token' }
+        example 'application/json', :unauthorized, {
+          error: 'You need to sign in or sign up before continuing.'
+        }
         run_test!
       end
     end
