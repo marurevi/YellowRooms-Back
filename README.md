@@ -30,7 +30,7 @@
 
 - Ruby on Rails
 - PostgresSQL
-- Rspect and Capybara to tests
+- Rspect to tests
 - Swagger to create Api documentation
 - Deployed in Heroku
 
@@ -139,12 +139,6 @@ Feel free to check the [issues page](../../issues/).
 ## Show your support
 
 Give a ⭐️ if you like this project!
-
-## Acknowledgments
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc
 
 ## 📝 License
 
