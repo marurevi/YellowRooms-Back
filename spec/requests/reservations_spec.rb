@@ -17,20 +17,18 @@ RSpec.describe 'Reservations', type: :request do
       end
     end
     context 'when there are reservations' do
+      let(:user) { create(:user) }
+      let(:headers) { generate_jwt_token_for(user) }
       before do
-        @user1 = create(:user, username: 'uA', email: 'e1@email.com')
-        @user2 = create(:user, username: 'uB', email: 'e2@email.com')
-        @user3 = create(:user, username: 'uC', email: 'e3@email.com')
-
         @room1 = create(:room, name: 'Room 1')
         @room2 = create(:room, name: 'Room 2')
         @room3 = create(:room, name: 'Room 3')
 
-        @r1 = create(:reservation, user: @user1, room: @room1, start_date: Date.today,
+        @r1 = create(:reservation, user:, room: @room1, start_date: Date.today,
                                    end_date: Date.today + 1.day)
-        @r2 = create(:reservation, user: @user2, room: @room2, start_date: Date.today,
+        @r2 = create(:reservation, user:, room: @room2, start_date: Date.today,
                                    end_date: Date.today + 3.day)
-        @r3 = create(:reservation, user: @user3, room: @room3, start_date: Date.today,
+        @r3 = create(:reservation, user:, room: @room3, start_date: Date.today,
                                    end_date: Date.today + 2.day)
         get api_v1_reservations_path, headers:
       end
