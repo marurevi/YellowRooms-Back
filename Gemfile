@@ -26,6 +26,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'rswag-specs'
 end
 
 group :development do
@@ -46,3 +47,7 @@ gem 'devise-jwt'
 gem 'jsonapi-serializer'
 
 gem 'cancancan', '~> 3.4'
+
+gem 'rswag-api'
+
+gem 'rswag-ui'

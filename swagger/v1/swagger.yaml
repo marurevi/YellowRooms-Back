@@ -1,0 +1,478 @@
+---
+openapi: 3.0.1
+info:
+  title: YELLOW ROOMS API V1
+  version: v1
+  description: An api to keep track of rooms and reservations of Yellow rooms hotel
+paths:
+  "/api/v1/reservations":
+    get:
+      summary: list reservations
+      tags:
+      - Reservations
+      description: List all reservations
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 200
+                    data:
+                    - id: '1'
+                      type: reservation
+                      attributes:
+                        id: 1
+                        user_id: 1
+                        room_id: 1
+                        start_date: '2022-09-21'
+                        end_date: '2022-09-23'
+                        city: Medellin
+                      relationships:
+                        user:
+                          data:
+                            id: '1'
+                            type: user
+                        room:
+                          data:
+                            id: '1'
+                            type: room
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+        '404':
+          description: No reservations
+          content:
+            application/json:
+              examples:
+                no_reservations:
+                  value:
+                    error: Couldn't find Reservation
+    post:
+      summary: create reservation
+      tags:
+      - Reservations
+      description: Create a reservation
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 201
+                    data:
+                      id: 2
+                      user_id: 1
+                      room_id: 1
+                      start_date: '2022-09-21'
+                      end_date: '2022-09-22'
+                      city: string
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              examples:
+                invalid_date:
+                  value:
+                    code: 422
+                    data:
+                      errors: Start date must be greater than or equal to 2022-09-21
+                        and Room is not available
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                room_id:
+                  type: integer
+                start_date:
+                  type: date
+                  example: '2022-09-22'
+                end_date:
+                  type: date
+                  example: '2022-09-23'
+                city:
+                  type: string
+              required:
+              - user_id
+              - room_id
+              - start_date
+              - end_date
+              - city
+  "/api/v1/reservations/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    delete:
+      summary: delete reservation
+      tags:
+      - Reservations
+      description: Delete a reservation
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 200
+                    data:
+                      message: Reservation deleted
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+  "/api/v1/rooms":
+    get:
+      summary: list rooms
+      tags:
+      - Rooms
+      description: List all rooms
+      security:
+      - bearer_auth: []
+      responses:
+        '404':
+          description: No rooms
+          content:
+            application/json:
+              examples:
+                no_rooms:
+                  value:
+                    message: No rooms found
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+        '200':
+          description: Successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 200
+                    data:
+                    - id: '1'
+                      type: room
+                      attributes:
+                        id: 1
+                        name: Room 1
+                        stars: 3
+                        persons_allowed: 2
+                        photo: photo_url
+                        description: description
+                        price: 340.7
+                      relationships:
+                        reservations:
+                          data:
+                          - id: '4'
+                            type: reservation
+                        users:
+                          data:
+                          - id: '1'
+                            type: user
+    post:
+      summary: create room
+      tags:
+      - Rooms
+      description: Create a room
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 201
+                    data:
+                      id: 6
+                      name: string
+                      stars: 0
+                      persons_allowed: 0
+                      photo: http://photo_url
+                      description: string
+                      price: 0
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              examples:
+                invalid_photo:
+                  value:
+                    code: 422
+                    data:
+                      errors: Photo is invalid
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                stars:
+                  type: integer
+                persons_allowed:
+                  type: integer
+                photo:
+                  type: string
+                  example: http://photo_url
+                description:
+                  type: string
+                price:
+                  type: number
+              required:
+              - name
+              - stars
+              - persons_allowed
+              - photo
+              - description
+              - price
+  "/api/v1/rooms/{id}":
+    delete:
+      summary: delete room
+      tags:
+      - Rooms
+      description: Delete a room
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successful:
+                  value:
+                    code: 200
+                    data:
+                      message: Room deleted
+        '401':
+          description: Unauthorized user
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: You need to sign in or sign up before continuing.
+  "/api/v1/register":
+    post:
+      summary: create account
+      tags:
+      - Authentication
+      description: creates an account
+      parameters: []
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              examples:
+                successfull_request:
+                  value:
+                    code: 201
+                    data:
+                      message: Signed up succesfully!
+                      user:
+                        id: 1
+                        username: string
+                        email: user@example.com
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              examples:
+                blank_username:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Username can't
+                        be blank, and Username only allows letters
+                blank_email:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Email can't
+                        be blank
+                username_taken:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Username has
+                        already been taken
+                email_taken:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Email has already
+                        been taken
+                invalid_username:
+                  value:
+                    data:
+                      message: User couldn't be created successfully. Username only
+                        allows letters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                    username:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - username
+                  - password
+  "/api/v1/login":
+    post:
+      summary: create session
+      tags:
+      - Authentication
+      description: Authenticates an user and returns a jwt token
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                successfull_login:
+                  value:
+                    code: 200
+                    data:
+                      user:
+                        id: 1
+                        username: string
+                        email: user@example.com
+                      message: Logged in successfully.
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              examples:
+                invalid_credentials:
+                  value:
+                    error: Invalid Login or password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    login:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - login
+                  - password
+  "/api/v1/logout":
+    delete:
+      summary: delete session
+      tags:
+      - Authentication
+      description: logout the user and revoke the jwt token
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successfully logout
+          content:
+            application/json:
+              examples:
+                succesful_logout:
+                  value:
+                    code: 200
+                    data:
+                      message: logged out successfully
+        '401':
+          description: No active session
+          content:
+            application/json:
+              examples:
+                no_session:
+                  value:
+                    code: 401
+                    data:
+                      message: Couldn't find an active session.
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearer_format: JWT
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000/
+tags:
+- name: Authentication
+- name: Rooms
+- name: Reservations
