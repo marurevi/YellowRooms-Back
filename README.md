@@ -2,7 +2,7 @@
 
 # Yellow Rooms - Back-end
 
->  Yellow rooms have been created to save reservations of a Hotel room. On this repository, we created the database with Postgresql following the ERD design...
+>  Yellow rooms have been created to save reservations of a Hotel room. This project is have been done to provide the backend to [Yellow Rooms app](https://github.com/marurevi/YellowRooms-Front). On this repository, we created the database with Postgresql following the ERD design...
 
 <br />
 <img src="app/images/WhatsApp Image 2022-09-16 at 13.50.17.png" alt="ERD image" align="center">
@@ -11,7 +11,7 @@
 
 > We created it following the BDD method (Behavioral Driven Development). To improve the efficiency of our test, we add to this project a coverage gem to allow us to keep a register of the test behavior.
 
-> > The coverage gem generates an HTML inform that can be found in the path `YellowRooms-Back/coverage/index.html`
+> The coverage gem generates an HTML inform that can be found in the path `YellowRooms-Back/coverage/index.html`
 
 <br />
 <img src="app/images/Coverage.png" alt="ERD image" align="center">
