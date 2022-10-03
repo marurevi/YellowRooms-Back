@@ -18,7 +18,7 @@
 
 <br />
 
-> We documented the Api's endpoints with Swagger. You can check it [here](https://yellow-rooms.herokuapp.com/api-docs).
+> We documented the Api's endpoints with Swagger. You can check it [here](https://yellow-rooms.fly.dev/api-docs).
 
 <br />
 <img src="app/images/ApiDocumentation.png" alt="ERD image" align="center">
@@ -32,7 +32,7 @@
 - PostgresSQL
 - Rspect to tests
 - Swagger to create Api documentation
-- Deployed in Heroku
+- Deployed in Fly
 
 ## Api's Endpoints
 
